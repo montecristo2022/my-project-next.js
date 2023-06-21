@@ -25,12 +25,12 @@ function NewsletterRegistration() {
     })
       .then((response) => {
         if (response.ok) {
-          return  response.json()
+          return response.json();
         }
 
-      return  response.json().then(data => {
-        throw new Error(data.message || 'something went wrong')
-      })
+        return response.json().then((data) => {
+          throw new Error(data.message || "something went wrong");
+        });
       })
       .then((data) => {
         notificationCtx.showNotification({
@@ -38,13 +38,14 @@ function NewsletterRegistration() {
           message: "Successfully registered for newsletter!",
           status: "success",
         });
-      }).catch(error => {
-         notificationCtx.showNotification({
-          title: "Error",
-          message: error.message || 'something went wrong',
-          status: "error",
-        })
       })
+      .catch((error) => {
+        notificationCtx.showNotification({
+          title: "Error",
+          message: error.message || "something went wrong",
+          status: "error",
+        });
+      });
   }
 
   return (

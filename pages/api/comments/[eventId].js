@@ -56,10 +56,10 @@ async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-    const documents = await getAllDocuments(client, "comments", { _id: -1 });
+      const documents = await getAllDocuments(client, "comments", { _id: -1 });
       res.status(200).json({ comments: documents });
     } catch (error) {
-        console.error(error); 
+      console.error(error);
       res.status(500).json({ message: "getting comments failed." });
     }
   }
@@ -68,8 +68,3 @@ async function handler(req, res) {
 }
 
 export default handler;
-
-
-
-
-

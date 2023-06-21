@@ -1,11 +1,14 @@
 import Head from "next/head";
 import { Fragment } from "react";
-import { getEventById, getAllEvents, getFeaturedEvents } from "../../helpers/api-util";
+import {
+  getEventById,
+  getAllEvents,
+  getFeaturedEvents,
+} from "../../helpers/api-util";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 import Comments from "@/components/input/comments";
-
 
 function EventDetailPage(props) {
   const event = props.selectedEvent;
@@ -40,20 +43,18 @@ export async function getStaticProps(context) {
     props: {
       selectedEvent: event,
     },
-     revalidate: 30
+    revalidate: 30,
   };
 }
 
-
-
 export async function getStaticPaths() {
   const event = await getFeaturedEvents();
-  
-  const paths = event.map((event) => ({params: {eventId: event.id}}))
+
+  const paths = event.map((event) => ({ params: { eventId: event.id } }));
 
   return {
     paths: paths,
-    fallback: 'blocking'
+    fallback: "blocking",
   };
 }
 

@@ -38,36 +38,77 @@ const notificationCtx = useContext(NotificationCotnext)
       status: "pending",
     });
 
+  //   fetch(`/api/comments/${eventId}`, {
+  //     method: "POST",
+  //     body: JSON.stringify(commentData),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+
+  //   }).then((response) => {
+  //      if (response.ok) {
+  //         return  response.json()
+  //       }
+
+  //     return  response.json().then(data => {
+  //       throw new Error(data.message || 'something went wrong')
+  //     })
+  //   }).then((data) => {
+  //    notificationCtx.showNotification({
+  //     title: "Success",
+  //     message: "Your comment was saved",
+  //     status: "success",
+  //   });
+  //   }).catch(error => {
+  //        notificationCtx.showNotification({
+  //         title: "Error",
+  //         message: error.message || 'something went wrong',
+  //         status: "error",
+  //       })
+  //     });
+  // }
+
     fetch(`/api/comments/${eventId}`, {
-      method: "POST",
-      body: JSON.stringify(commentData),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    method: "POST",
+    body: JSON.stringify(commentData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+}).then((response) => {
+   if (response.ok) {
+      return  response.json();
+   }
 
-    }).then((response) => {
-       if (response.ok) {
-          return  response.json()
-        }
+   // Новый код: проверяем, возвращает ли сервер JSON.
+   const contentType = response.headers.get("content-type");
+   if (contentType && contentType.includes("application/json")) {
+     return response.json().then(data => {
+       throw new Error(data.message || 'Something went wrong!');
+     });
+   } else {
+     throw new Error('Server error: ' + response.status);
+   }
 
-      return  response.json().then(data => {
-        throw new Error(data.message || 'something went wrong')
-      })
-    }).then((data) => {
+}).then((data) => {
+ notificationCtx.showNotification({
+  title: "Success",
+  message: "Your comment was saved",
+  status: "success",
+});
+}).catch(error => {
      notificationCtx.showNotification({
-      title: "Success",
-      message: "Your comment was saved",
-      status: "success",
+      title: "Error",
+      message: error.message || 'Something went wrong!',
+      status: "error",
     });
-    }).catch(error => {
-         notificationCtx.showNotification({
-          title: "Error",
-          message: error.message || 'something went wrong',
-          status: "error",
-        })
-      });
-  }
+  });
+}
 
+    
+    
+    
+    
+    
   return (
     <section className={classes.comments}>
       <button onClick={toggleCommentsHandler}>
